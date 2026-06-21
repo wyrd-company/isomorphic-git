@@ -35,9 +35,12 @@ export async function _getSubmoduleStatus({ fs, cache, dir, gitdir, path }) {
     }
   )
 
-  // A submodule is only populated once its git directory has been created.
+  // A submodule is only "set up" once the superproject records a gitlink for
+  // it AND its git directory has been created. With no gitlink there is no
+  // recorded commit to compare HEAD against, so we report it as uninitialized
+  // (with oid: null surfaced) rather than silently bucketing it as modified.
   const dotgit = join(dir, path, '.git')
-  if (!(await fs.exists(dotgit))) {
+  if (oid == null || !(await fs.exists(dotgit))) {
     return {
       path,
       name: submodule.name,
