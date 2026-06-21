@@ -33,6 +33,7 @@ import { getSubmoduleStatus } from './api/getSubmoduleStatus.js'
 import { hashBlob } from './api/hashBlob.js'
 import { indexPack } from './api/indexPack.js'
 import { init } from './api/init.js'
+import { initSubmodule } from './api/initSubmodule.js'
 import { isDescendent } from './api/isDescendent.js'
 import { isIgnored } from './api/isIgnored.js'
 import { listBranches } from './api/listBranches.js'
@@ -112,6 +113,7 @@ export {
   hashBlob,
   indexPack,
   init,
+  initSubmodule,
   isDescendent,
   isIgnored,
   listBranches,
@@ -190,6 +192,7 @@ export default {
   hashBlob,
   indexPack,
   init,
+  initSubmodule,
   isDescendent,
   isIgnored,
   listBranches,

@@ -41,6 +41,7 @@ describe('exports', () => {
         "hashBlob",
         "indexPack",
         "init",
+        "initSubmodule",
         "isDescendent",
         "isIgnored",
         "listBranches",
