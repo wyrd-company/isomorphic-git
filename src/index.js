@@ -7,6 +7,7 @@ import { abortMerge } from './api/abortMerge.js'
 import { add } from './api/add.js'
 import { addNote } from './api/addNote.js'
 import { addRemote } from './api/addRemote.js'
+import { addSubmodule } from './api/addSubmodule.js'
 import { annotatedTag } from './api/annotatedTag.js'
 import { branch } from './api/branch.js'
 import { checkout } from './api/checkout.js'
@@ -32,6 +33,7 @@ import { getSubmoduleStatus } from './api/getSubmoduleStatus.js'
 import { hashBlob } from './api/hashBlob.js'
 import { indexPack } from './api/indexPack.js'
 import { init } from './api/init.js'
+import { initSubmodule } from './api/initSubmodule.js'
 import { isDescendent } from './api/isDescendent.js'
 import { isIgnored } from './api/isIgnored.js'
 import { listBranches } from './api/listBranches.js'
@@ -84,6 +86,7 @@ export {
   add,
   addNote,
   addRemote,
+  addSubmodule,
   annotatedTag,
   branch,
   cherryPick,
@@ -110,6 +113,7 @@ export {
   hashBlob,
   indexPack,
   init,
+  initSubmodule,
   isDescendent,
   isIgnored,
   listBranches,
@@ -161,6 +165,7 @@ export default {
   abortMerge,
   addNote,
   addRemote,
+  addSubmodule,
   annotatedTag,
   branch,
   cherryPick,
@@ -187,6 +192,7 @@ export default {
   hashBlob,
   indexPack,
   init,
+  initSubmodule,
   isDescendent,
   isIgnored,
   listBranches,
