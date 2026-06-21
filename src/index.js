@@ -28,6 +28,7 @@ import { getConfig } from './api/getConfig.js'
 import { getConfigAll } from './api/getConfigAll.js'
 import { getRemoteInfo } from './api/getRemoteInfo.js'
 import { getRemoteInfo2 } from './api/getRemoteInfo2.js'
+import { getSubmoduleStatus } from './api/getSubmoduleStatus.js'
 import { hashBlob } from './api/hashBlob.js'
 import { indexPack } from './api/indexPack.js'
 import { init } from './api/init.js'
@@ -39,6 +40,7 @@ import { listNotes } from './api/listNotes.js'
 import { listRefs } from './api/listRefs.js'
 import { listRemotes } from './api/listRemotes.js'
 import { listServerRefs } from './api/listServerRefs.js'
+import { listSubmodules } from './api/listSubmodules.js'
 import { listTags } from './api/listTags.js'
 import { log } from './api/log.js'
 import { merge } from './api/merge.js'
@@ -104,6 +106,7 @@ export {
   findRoot,
   getRemoteInfo,
   getRemoteInfo2,
+  getSubmoduleStatus,
   hashBlob,
   indexPack,
   init,
@@ -115,6 +118,7 @@ export {
   listRefs,
   listRemotes,
   listServerRefs,
+  listSubmodules,
   listTags,
   log,
   merge,
@@ -179,6 +183,7 @@ export default {
   findRoot,
   getRemoteInfo,
   getRemoteInfo2,
+  getSubmoduleStatus,
   hashBlob,
   indexPack,
   init,
@@ -190,6 +195,7 @@ export default {
   listRefs,
   listRemotes,
   listServerRefs,
+  listSubmodules,
   listTags,
   log,
   merge,
