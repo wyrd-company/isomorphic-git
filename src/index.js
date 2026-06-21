@@ -7,6 +7,7 @@ import { abortMerge } from './api/abortMerge.js'
 import { add } from './api/add.js'
 import { addNote } from './api/addNote.js'
 import { addRemote } from './api/addRemote.js'
+import { addSubmodule } from './api/addSubmodule.js'
 import { annotatedTag } from './api/annotatedTag.js'
 import { branch } from './api/branch.js'
 import { checkout } from './api/checkout.js'
@@ -84,6 +85,7 @@ export {
   add,
   addNote,
   addRemote,
+  addSubmodule,
   annotatedTag,
   branch,
   cherryPick,
@@ -161,6 +163,7 @@ export default {
   abortMerge,
   addNote,
   addRemote,
+  addSubmodule,
   annotatedTag,
   branch,
   cherryPick,

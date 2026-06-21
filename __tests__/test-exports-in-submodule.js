@@ -14,6 +14,7 @@ describe('exports', () => {
         "add",
         "addNote",
         "addRemote",
+        "addSubmodule",
         "annotatedTag",
         "branch",
         "checkout",
