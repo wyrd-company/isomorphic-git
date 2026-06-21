@@ -12,7 +12,7 @@ import { assertParameter } from '../utils/assertParameter.js'
  * @param {FsClient} args.fs - a file system client
  * @param {string} args.dir - The [working tree](dir-vs-gitdir.md) directory path
  *
- * @returns {Promise<Array<{name: string, path: string, url: string}>>} Resolves successfully with an array of `{name, path, url}` objects
+ * @returns {Promise<Array<{name: string, path: string, url: string|void}>>} Resolves successfully with an array of `{name, path, url}` objects
  *
  * @example
  * let submodules = await git.listSubmodules({ fs, dir: '/tutorial' })

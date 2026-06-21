@@ -6,7 +6,7 @@ import { GitConfig } from '../models/GitConfig.js'
  * @param {import('../models/FileSystem.js').FileSystem} args.fs
  * @param {string} args.dir
  *
- * @returns {Promise<Array<{name: string, path: string, url: string}>>}
+ * @returns {Promise<Array<{name: string, path: string, url: string|void}>>}
  */
 export async function _listSubmodules({ fs, dir }) {
   const text = await fs.read(`${dir}/.gitmodules`, { encoding: 'utf8' })
