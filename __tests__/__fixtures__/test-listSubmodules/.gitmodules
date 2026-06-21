@@ -1,0 +1,6 @@
+[submodule "vendor/foo"]
+	path = vendor/foo
+	url = https://github.com/example/foo.git
+[submodule "bar"]
+	path = bar
+	url = ../bar.git

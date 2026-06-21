@@ -39,6 +39,7 @@ import { listNotes } from './api/listNotes.js'
 import { listRefs } from './api/listRefs.js'
 import { listRemotes } from './api/listRemotes.js'
 import { listServerRefs } from './api/listServerRefs.js'
+import { listSubmodules } from './api/listSubmodules.js'
 import { listTags } from './api/listTags.js'
 import { log } from './api/log.js'
 import { merge } from './api/merge.js'
@@ -115,6 +116,7 @@ export {
   listRefs,
   listRemotes,
   listServerRefs,
+  listSubmodules,
   listTags,
   log,
   merge,
@@ -190,6 +192,7 @@ export default {
   listRefs,
   listRemotes,
   listServerRefs,
+  listSubmodules,
   listTags,
   log,
   merge,

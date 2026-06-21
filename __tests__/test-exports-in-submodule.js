@@ -47,6 +47,7 @@ describe('exports', () => {
         "listRefs",
         "listRemotes",
         "listServerRefs",
+        "listSubmodules",
         "listTags",
         "log",
         "merge",
