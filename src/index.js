@@ -28,6 +28,7 @@ import { getConfig } from './api/getConfig.js'
 import { getConfigAll } from './api/getConfigAll.js'
 import { getRemoteInfo } from './api/getRemoteInfo.js'
 import { getRemoteInfo2 } from './api/getRemoteInfo2.js'
+import { getSubmoduleStatus } from './api/getSubmoduleStatus.js'
 import { hashBlob } from './api/hashBlob.js'
 import { indexPack } from './api/indexPack.js'
 import { init } from './api/init.js'
@@ -105,6 +106,7 @@ export {
   findRoot,
   getRemoteInfo,
   getRemoteInfo2,
+  getSubmoduleStatus,
   hashBlob,
   indexPack,
   init,
@@ -181,6 +183,7 @@ export default {
   findRoot,
   getRemoteInfo,
   getRemoteInfo2,
+  getSubmoduleStatus,
   hashBlob,
   indexPack,
   init,
