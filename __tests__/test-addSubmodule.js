@@ -87,4 +87,22 @@ describe('addSubmodule', () => {
     expect(error).not.toBeNull()
     expect(error instanceof Errors.AlreadyExistsError).toBe(true)
   })
+
+  it('rejects a path that escapes the working tree', async () => {
+    // Setup
+    const { fs, dir, gitdir } = await makeFixture('test-empty')
+    await init({ fs, dir, gitdir })
+    const url = `http://${localhost}:8888/test-clone.git`
+    // Test
+    for (const path of ['../escape', 'a/../../escape', '/abs/escape']) {
+      let error = null
+      try {
+        await addSubmodule({ fs, http, dir, gitdir, url, path })
+      } catch (err) {
+        error = err
+      }
+      expect(error).not.toBeNull()
+      expect(error instanceof Errors.UnsafeFilepathError).toBe(true)
+    }
+  })
 })

@@ -1,5 +1,6 @@
 // @ts-check
 import { AlreadyExistsError } from '../errors/AlreadyExistsError.js'
+import { UnsafeFilepathError } from '../errors/UnsafeFilepathError.js'
 import { GitConfigManager } from '../managers/GitConfigManager.js'
 import { GitIndexManager } from '../managers/GitIndexManager.js'
 import { GitRefManager } from '../managers/GitRefManager.js'
@@ -10,6 +11,24 @@ import { relative } from '../utils/relative.js'
 
 import { _clone } from './clone.js'
 import { _listSubmodules } from './listSubmodules.js'
+
+/**
+ * Reject absolute paths and any `.`/`..` segment so a caller-supplied submodule
+ * path or name cannot escape the working tree or the modules directory once it
+ * is fed through `join`.
+ *
+ * @param {string} value
+ */
+function assertSafeSubmodulePath(value) {
+  const isAbsolute = value.startsWith('/') || /^[a-zA-Z]:/.test(value)
+  const segments = value.split(/[/\\]/)
+  if (
+    isAbsolute ||
+    segments.some(segment => segment === '.' || segment === '..')
+  ) {
+    throw new UnsafeFilepathError(value)
+  }
+}
 
 /**
  * @param {object} args
@@ -50,6 +69,11 @@ export async function _addSubmodule({
   corsProxy,
   headers,
 }) {
+  // `path` and `name` are caller-controlled and flow into `join`, so guard
+  // against traversal before deriving any paths from them.
+  assertSafeSubmodulePath(path)
+  assertSafeSubmodulePath(name)
+
   // Refuse to clobber a submodule that is already registered.
   const submodules = await _listSubmodules({ fs, dir })
   if (submodules.some(sm => sm.name === name || sm.path === path)) {
