@@ -1,34 +1,16 @@
 // @ts-check
 import { AlreadyExistsError } from '../errors/AlreadyExistsError.js'
-import { UnsafeFilepathError } from '../errors/UnsafeFilepathError.js'
 import { GitConfigManager } from '../managers/GitConfigManager.js'
 import { GitIndexManager } from '../managers/GitIndexManager.js'
 import { GitRefManager } from '../managers/GitRefManager.js'
 import { GitConfig } from '../models/GitConfig.js'
 import { _writeObject } from '../storage/writeObject.js'
+import { assertSafeSubmodulePath } from '../utils/assertSafeSubmodulePath.js'
 import { join } from '../utils/join.js'
-import { relative } from '../utils/relative.js'
 
 import { _clone } from './clone.js'
+import { _linkSubmoduleWorktree } from './linkSubmoduleWorktree.js'
 import { _listSubmodules } from './listSubmodules.js'
-
-/**
- * Reject absolute paths and any `.`/`..` segment so a caller-supplied submodule
- * path or name cannot escape the working tree or the modules directory once it
- * is fed through `join`.
- *
- * @param {string} value
- */
-function assertSafeSubmodulePath(value) {
-  const isAbsolute = value.startsWith('/') || /^[a-zA-Z]:/.test(value)
-  const segments = value.split(/[/\\]/)
-  if (
-    isAbsolute ||
-    segments.some(segment => segment === '.' || segment === '..')
-  ) {
-    throw new UnsafeFilepathError(value)
-  }
-}
 
 /**
  * @param {object} args
@@ -110,27 +92,8 @@ export async function _addSubmodule({
     headers: headers || {},
   })
 
-  // Point the working tree's `.git` file at the absorbed git directory, and
-  // point the git directory back at the working tree, both as relative paths
-  // (this is what git records and what discoverGitdir expects).
-  await fs.write(
-    join(submoduleDir, '.git'),
-    `gitdir: ${relative(submoduleDir, submoduleGitdir)}\n`,
-    'utf8'
-  )
-  const submoduleConfig = await GitConfigManager.get({
-    fs,
-    gitdir: submoduleGitdir,
-  })
-  await submoduleConfig.set(
-    'core.worktree',
-    relative(submoduleGitdir, submoduleDir)
-  )
-  await GitConfigManager.save({
-    fs,
-    gitdir: submoduleGitdir,
-    config: submoduleConfig,
-  })
+  // Link the working tree to the absorbed git directory and back.
+  await _linkSubmoduleWorktree({ fs, submoduleDir, submoduleGitdir })
 
   // The commit the superproject will record as the gitlink.
   const oid = await GitRefManager.resolve({

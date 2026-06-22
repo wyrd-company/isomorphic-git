@@ -2,6 +2,7 @@
 import '../typedefs.js'
 
 import { _clone } from '../commands/clone.js'
+import { _updateSubmodules } from '../commands/updateSubmodules.js'
 import { FileSystem } from '../models/FileSystem.js'
 import { assertParameter } from '../utils/assertParameter.js'
 import { discoverGitdir } from '../utils/discoverGitdir.js'
@@ -36,6 +37,7 @@ import { join } from '../utils/join.js'
  * @param {object} [args.cache] - a [cache](cache.md) object
  * @param {boolean} [args.nonBlocking = false] - if true, checkout will happen non-blockingly (useful for long-running operations blocking the thread in browser environments)
  * @param {number} [args.batchSize = 100] - If args.nonBlocking is true, batchSize is the number of files to process at a time avoid blocking the executing thread. The default value of 100 is a good starting point.
+ * @param {boolean} [args.recurseSubmodules = false] - After checkout, initialize and update the repository's submodules (recursively). Has no effect when `noCheckout` is true, since there is no working tree to populate.
  *
  * @returns {Promise<void>} Resolves successfully when clone completes
  *
@@ -78,6 +80,7 @@ export async function clone({
   cache = {},
   nonBlocking = false,
   batchSize = 100,
+  recurseSubmodules = false,
 }) {
   try {
     assertParameter('fs', fs)
@@ -90,7 +93,7 @@ export async function clone({
 
     const fsp = new FileSystem(fs)
     const updatedGitdir = await discoverGitdir({ fsp, dotgit: gitdir })
-    return await _clone({
+    await _clone({
       fs: fsp,
       cache,
       http,
@@ -117,6 +120,26 @@ export async function clone({
       nonBlocking,
       batchSize,
     })
+    // Submodules are interpreted in the front-end (api) layer, leaving the
+    // clone command itself unaware of them.
+    if (recurseSubmodules && !noCheckout) {
+      await _updateSubmodules({
+        fs: fsp,
+        cache,
+        http,
+        onProgress,
+        onMessage,
+        onAuth,
+        onAuthFailure,
+        onAuthSuccess,
+        dir,
+        gitdir: updatedGitdir,
+        init: true,
+        recursive: true,
+        corsProxy,
+        headers,
+      })
+    }
   } catch (err) {
     err.caller = 'git.clone'
     throw err

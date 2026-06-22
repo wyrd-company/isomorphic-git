@@ -74,6 +74,7 @@ describe('exports', () => {
         "statusMatrix",
         "tag",
         "updateIndex",
+        "updateSubmodules",
         "version",
         "walk",
         "writeBlob",
