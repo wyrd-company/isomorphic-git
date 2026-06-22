@@ -175,6 +175,10 @@ async function updateOne({
   })
 
   if (recursive) {
+    // `paths` filters top-level submodules only, so it is intentionally not
+    // threaded into the recursion (all nested submodules are considered).
+    // `init` IS threaded so a non-init recursive update does not silently
+    // initialize nested submodules, matching `git submodule update`.
     await _updateSubmodules({
       fs,
       cache,
@@ -186,8 +190,8 @@ async function updateOne({
       onAuthSuccess,
       dir: submoduleDir,
       gitdir: submoduleGitdir,
-      init: true,
-      recursive: true,
+      init,
+      recursive,
       corsProxy,
       headers,
     })
