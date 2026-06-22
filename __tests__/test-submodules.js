@@ -8,7 +8,7 @@ import { makeFixture } from './__helpers__/FixtureFS.js'
 const localhost =
   typeof window === 'undefined' ? 'localhost' : window.location.hostname
 
-describe('submodule "support"', () => {
+describe('submodules staged in the index', () => {
   it('submodules are still staged after fresh clone', async () => {
     const { fs, dir, gitdir } = await makeFixture('test-clone-submodules')
     await clone({
