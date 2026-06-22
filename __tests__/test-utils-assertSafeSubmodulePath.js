@@ -17,6 +17,8 @@ describe('utils/assertSafeSubmodulePath', () => {
       'a/./b',
       'C:/x',
       'a\\..\\b',
+      '\\abs',
+      '\\\\server\\share',
     ]
     for (const value of unsafe) {
       let error = null

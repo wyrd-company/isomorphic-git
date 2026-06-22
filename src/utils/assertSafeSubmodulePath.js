@@ -9,7 +9,8 @@ import { UnsafeFilepathError } from '../errors/UnsafeFilepathError.js'
  * @throws {UnsafeFilepathError} if `value` is absolute or has a `.`/`..` segment
  */
 export function assertSafeSubmodulePath(value) {
-  const isAbsolute = value.startsWith('/') || /^[a-zA-Z]:/.test(value)
+  const isAbsolute =
+    value.startsWith('/') || value.startsWith('\\') || /^[a-zA-Z]:/.test(value)
   const segments = value.split(/[/\\]/)
   if (
     isAbsolute ||
