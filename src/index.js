@@ -7,6 +7,7 @@ import { abortMerge } from './api/abortMerge.js'
 import { add } from './api/add.js'
 import { addNote } from './api/addNote.js'
 import { addRemote } from './api/addRemote.js'
+import { addSubmodule } from './api/addSubmodule.js'
 import { annotatedTag } from './api/annotatedTag.js'
 import { branch } from './api/branch.js'
 import { checkout } from './api/checkout.js'
@@ -28,9 +29,11 @@ import { getConfig } from './api/getConfig.js'
 import { getConfigAll } from './api/getConfigAll.js'
 import { getRemoteInfo } from './api/getRemoteInfo.js'
 import { getRemoteInfo2 } from './api/getRemoteInfo2.js'
+import { getSubmoduleStatus } from './api/getSubmoduleStatus.js'
 import { hashBlob } from './api/hashBlob.js'
 import { indexPack } from './api/indexPack.js'
 import { init } from './api/init.js'
+import { initSubmodule } from './api/initSubmodule.js'
 import { isDescendent } from './api/isDescendent.js'
 import { isIgnored } from './api/isIgnored.js'
 import { listBranches } from './api/listBranches.js'
@@ -39,6 +42,7 @@ import { listNotes } from './api/listNotes.js'
 import { listRefs } from './api/listRefs.js'
 import { listRemotes } from './api/listRemotes.js'
 import { listServerRefs } from './api/listServerRefs.js'
+import { listSubmodules } from './api/listSubmodules.js'
 import { listTags } from './api/listTags.js'
 import { log } from './api/log.js'
 import { merge } from './api/merge.js'
@@ -62,6 +66,7 @@ import { status } from './api/status.js'
 import { statusMatrix } from './api/statusMatrix.js'
 import { tag } from './api/tag.js'
 import { updateIndex } from './api/updateIndex.js'
+import { updateSubmodules } from './api/updateSubmodules.js'
 import { version } from './api/version.js'
 import { walk } from './api/walk.js'
 import { writeBlob } from './api/writeBlob.js'
@@ -82,6 +87,7 @@ export {
   add,
   addNote,
   addRemote,
+  addSubmodule,
   annotatedTag,
   branch,
   cherryPick,
@@ -104,9 +110,11 @@ export {
   findRoot,
   getRemoteInfo,
   getRemoteInfo2,
+  getSubmoduleStatus,
   hashBlob,
   indexPack,
   init,
+  initSubmodule,
   isDescendent,
   isIgnored,
   listBranches,
@@ -115,6 +123,7 @@ export {
   listRefs,
   listRemotes,
   listServerRefs,
+  listSubmodules,
   listTags,
   log,
   merge,
@@ -132,6 +141,7 @@ export {
   renameBranch,
   resetIndex,
   updateIndex,
+  updateSubmodules,
   resolveRef,
   status,
   statusMatrix,
@@ -157,6 +167,7 @@ export default {
   abortMerge,
   addNote,
   addRemote,
+  addSubmodule,
   annotatedTag,
   branch,
   cherryPick,
@@ -179,9 +190,11 @@ export default {
   findRoot,
   getRemoteInfo,
   getRemoteInfo2,
+  getSubmoduleStatus,
   hashBlob,
   indexPack,
   init,
+  initSubmodule,
   isDescendent,
   isIgnored,
   listBranches,
@@ -190,6 +203,7 @@ export default {
   listRefs,
   listRemotes,
   listServerRefs,
+  listSubmodules,
   listTags,
   log,
   merge,
@@ -207,6 +221,7 @@ export default {
   renameBranch,
   resetIndex,
   updateIndex,
+  updateSubmodules,
   resolveRef,
   status,
   statusMatrix,
