@@ -37,7 +37,7 @@ import { join } from '../utils/join.js'
  * @param {object} [args.cache] - a [cache](cache.md) object
  * @param {boolean} [args.nonBlocking = false] - if true, checkout will happen non-blockingly (useful for long-running operations blocking the thread in browser environments)
  * @param {number} [args.batchSize = 100] - If args.nonBlocking is true, batchSize is the number of files to process at a time avoid blocking the executing thread. The default value of 100 is a good starting point.
- * @param {boolean} [args.recurseSubmodules = false] - After checkout, initialize and update the repository's submodules (recursively).
+ * @param {boolean} [args.recurseSubmodules = false] - After checkout, initialize and update the repository's submodules (recursively). Has no effect when `noCheckout` is true, since there is no working tree to populate.
  *
  * @returns {Promise<void>} Resolves successfully when clone completes
  *

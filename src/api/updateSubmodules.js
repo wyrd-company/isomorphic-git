@@ -15,6 +15,10 @@ import { join } from '../utils/join.js'
  * cloned yet, otherwise fetches it, then checks out the commit recorded by the
  * superproject as a detached HEAD — matching `git submodule update`.
  *
+ * Submodules are processed in order and the update is not transactional: if
+ * one fails (for example its recorded commit was not fetched), the returned
+ * promise rejects and any submodules already updated remain updated.
+ *
  * @param {object} args
  * @param {FsClient} args.fs - a file system client
  * @param {HttpClient} args.http - an HTTP client
