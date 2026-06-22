@@ -4,6 +4,7 @@ import {
   updateSubmodules,
   getSubmoduleStatus,
   getConfig,
+  Errors,
 } from 'isomorphic-git'
 import http from 'isomorphic-git/http'
 
@@ -71,5 +72,33 @@ describe('updateSubmodules', () => {
     expect(updated).toEqual([])
     const status = await getSubmoduleStatus({ fs, dir, gitdir, path: 'lib' })
     expect(status.status).toEqual('uninitialized')
+  })
+
+  it('isolates a failing submodule and still updates the others', async () => {
+    // Setup: a superproject with one good submodule and one whose url 404s.
+    const { fs, dir, gitdir } = await makeFixture(
+      'test-update-submodules-mixed'
+    )
+    await clone({
+      fs,
+      http,
+      dir,
+      gitdir,
+      url: `http://${localhost}:8888/test-submodule-mixed.git`,
+    })
+    // Test
+    let error = null
+    try {
+      await updateSubmodules({ fs, http, dir, gitdir, init: true })
+    } catch (err) {
+      error = err
+    }
+    // The broken submodule fails, surfaced as a MultipleGitError ...
+    expect(error instanceof Errors.MultipleGitError).toBe(true)
+    expect(error.errors.length).toEqual(1)
+    expect(error.errors[0].data.submodule).toEqual('broken')
+    // ... but the good one was still updated.
+    const status = await getSubmoduleStatus({ fs, dir, gitdir, path: 'lib' })
+    expect(status.status).toEqual('initialized')
   })
 })
