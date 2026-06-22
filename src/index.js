@@ -66,6 +66,7 @@ import { status } from './api/status.js'
 import { statusMatrix } from './api/statusMatrix.js'
 import { tag } from './api/tag.js'
 import { updateIndex } from './api/updateIndex.js'
+import { updateSubmodules } from './api/updateSubmodules.js'
 import { version } from './api/version.js'
 import { walk } from './api/walk.js'
 import { writeBlob } from './api/writeBlob.js'
@@ -140,6 +141,7 @@ export {
   renameBranch,
   resetIndex,
   updateIndex,
+  updateSubmodules,
   resolveRef,
   status,
   statusMatrix,
@@ -219,6 +221,7 @@ export default {
   renameBranch,
   resetIndex,
   updateIndex,
+  updateSubmodules,
   resolveRef,
   status,
   statusMatrix,
