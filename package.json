@@ -167,6 +167,11 @@
     "webpack-bundle-analyzer": "3.4.1",
     "webpack-cli": "^4.0.0"
   },
+  "overrides": {
+    "jsdoc-api": {
+      "jsdoc": "^4.0.4"
+    }
+  },
   "prettier": "./.prettierrc.cjs",
   "bundlewatch": {
     "files": [
