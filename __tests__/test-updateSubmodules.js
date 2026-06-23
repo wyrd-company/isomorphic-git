@@ -101,4 +101,42 @@ describe('updateSubmodules', () => {
     const status = await getSubmoduleStatus({ fs, dir, gitdir, path: 'lib' })
     expect(status.status).toEqual('initialized')
   })
+
+  it('flattens nested failures from a recursive update', async () => {
+    // Setup: top -> mid (test-submodule-mixed.git, which has a broken nested
+    // submodule), so the recursion produces a nested failure.
+    const { fs, dir, gitdir } = await makeFixture(
+      'test-update-submodules-nested'
+    )
+    await clone({
+      fs,
+      http,
+      dir,
+      gitdir,
+      url: `http://${localhost}:8888/test-recurse-nested-superproject.git`,
+    })
+    // Test
+    let error = null
+    try {
+      await updateSubmodules({
+        fs,
+        http,
+        dir,
+        gitdir,
+        init: true,
+        recursive: true,
+      })
+    } catch (err) {
+      error = err
+    }
+    // The nested broken submodule surfaces as a single leaf error, not a
+    // MultipleGitError nested inside the outer MultipleGitError.
+    expect(error instanceof Errors.MultipleGitError).toBe(true)
+    expect(error.errors.length).toEqual(1)
+    expect(error.errors[0] instanceof Errors.MultipleGitError).toBe(false)
+    expect(error.errors[0].data.submodule).toEqual('broken')
+    // The intermediate submodule itself was checked out.
+    const status = await getSubmoduleStatus({ fs, dir, gitdir, path: 'mid' })
+    expect(status.status).toEqual('initialized')
+  })
 })

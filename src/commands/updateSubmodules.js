@@ -76,10 +76,20 @@ export async function _updateSubmodules({
       })
       if (result) updated.push(result)
     } catch (err) {
-      // Isolate per-submodule failures: tag the error with the submodule path
-      // and keep going, so one bad submodule does not abort the whole batch.
-      err.data = { ...err.data, submodule: submodule.path }
-      errors.push(err)
+      // Isolate per-submodule failures: keep going so one bad submodule does
+      // not abort the whole batch.
+      if (err instanceof MultipleGitError) {
+        // A recursive update already collected (and tagged) leaf errors; flatten
+        // them in rather than nesting a MultipleGitError inside `errors`.
+        errors.push(...err.errors)
+      } else {
+        // Tag the leaf error with the submodule it came from (guarding against
+        // the unlikely case of a non-object being thrown).
+        if (err && typeof err === 'object') {
+          err.data = { ...err.data, submodule: submodule.path }
+        }
+        errors.push(err)
+      }
     }
   }
   if (errors.length > 0) throw new MultipleGitError(errors)
