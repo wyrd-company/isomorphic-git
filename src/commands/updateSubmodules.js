@@ -1,4 +1,5 @@
 // @ts-check
+import { MultipleGitError } from '../errors/MultipleGitError.js'
 import { GitConfigManager } from '../managers/GitConfigManager.js'
 import { GitIndexManager } from '../managers/GitIndexManager.js'
 import { assertSafeSubmodulePath } from '../utils/assertSafeSubmodulePath.js'
@@ -53,26 +54,45 @@ export async function _updateSubmodules({
     paths && paths.length ? all.filter(sm => paths.includes(sm.path)) : all
 
   const updated = []
+  const errors = []
   for (const submodule of selected) {
-    const result = await updateOne({
-      fs,
-      cache,
-      http,
-      onProgress,
-      onMessage,
-      onAuth,
-      onAuthFailure,
-      onAuthSuccess,
-      dir,
-      gitdir,
-      submodule,
-      init,
-      recursive,
-      corsProxy,
-      headers,
-    })
-    if (result) updated.push(result)
+    try {
+      const result = await updateOne({
+        fs,
+        cache,
+        http,
+        onProgress,
+        onMessage,
+        onAuth,
+        onAuthFailure,
+        onAuthSuccess,
+        dir,
+        gitdir,
+        submodule,
+        init,
+        recursive,
+        corsProxy,
+        headers,
+      })
+      if (result) updated.push(result)
+    } catch (err) {
+      // Isolate per-submodule failures: keep going so one bad submodule does
+      // not abort the whole batch.
+      if (err instanceof MultipleGitError) {
+        // A recursive update already collected (and tagged) leaf errors; flatten
+        // them in rather than nesting a MultipleGitError inside `errors`.
+        errors.push(...err.errors)
+      } else {
+        // Tag the leaf error with the submodule it came from (guarding against
+        // the unlikely case of a non-object being thrown).
+        if (err && typeof err === 'object') {
+          err.data = { ...err.data, submodule: submodule.path }
+        }
+        errors.push(err)
+      }
+    }
   }
+  if (errors.length > 0) throw new MultipleGitError(errors)
   return updated
 }
 
